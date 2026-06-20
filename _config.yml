@@ -1,0 +1,12 @@
+title: LLM Notes
+author: Susheel Kumar Shukla
+
+repository:
+  url: https://susheelshukla.github.io//llm-notes
+
+html:
+  use_repository_button: true
+  use_issues_button: true
+
+execute:
+  execute_notebooks: force
