@@ -10,3 +10,10 @@ html:
 
 execute:
   execute_notebooks: "off"
+
+exclude_patterns:
+  - .venv/**
+  - "**/.ipynb_checkpoints"
+  - _build/**
+  - build.log
+  - .git/**

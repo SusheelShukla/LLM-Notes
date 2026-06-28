@@ -1,0 +1,149 @@
+Running Jupyter-Book v0.15.1
+Source Folder: /home/skshukla/Documents/GitHub/LLM-Notes
+Config Path: /home/skshukla/Documents/GitHub/LLM-Notes/_config.yml
+Output Path: /home/skshukla/Documents/GitHub/LLM-Notes/_build/html
+[01mRunning Sphinx v5.0.2[39;49;00m
+Adding copy buttons to code blocks...
+Adding copy buttons to code blocks...
+[etoc] Changing master_doc to 'intro'
+locale_dir /home/skshukla/Documents/GitHub/LLM-Notes/locales/en/LC_MESSAGES does not exists
+[01mmyst v0.18.1:[39;49;00m MdParserConfig(commonmark_only=False, gfm_only=False, enable_extensions=['colon_fence', 'dollarmath', 'linkify', 'substitution', 'tasklist'], disable_syntax=[], all_links_external=False, url_schemes=['mailto', 'http', 'https'], ref_domains=None, highlight_code_blocks=True, number_code_blocks=[], title_to_header=False, heading_anchors=None, heading_slug_func=None, footnote_transition=True, words_per_minute=200, sub_delimiters=('{', '}'), linkify_fuzzy_links=True, dmath_allow_labels=True, dmath_allow_space=True, dmath_allow_digits=True, dmath_double_inline=False, update_mathjax=True, mathjax_classes='tex2jax_process|mathjax_process|math|output_area')
+[01mmyst-nb v0.17.2:[39;49;00m NbParserConfig(custom_formats={}, metadata_key='mystnb', cell_metadata_key='mystnb', kernel_rgx_aliases={}, execution_mode='off', execution_cache_path='', execution_excludepatterns=[], execution_timeout=30, execution_in_temp=False, execution_allow_errors=False, execution_raise_on_error=False, execution_show_tb=False, merge_streams=False, render_plugin='default', remove_code_source=False, remove_code_outputs=False, code_prompt_show='Show code cell {type}', code_prompt_hide='Hide code cell {type}', number_source_lines=False, output_stderr='show', render_text_lexer='myst-ansi', render_error_lexer='ipythontb', render_image_options={}, render_figure_options={}, render_markdown_format='commonmark', output_folder='build', append_css=True, metadata_to_fm=False)
+Using jupyter-cache at: /home/skshukla/Documents/GitHub/LLM-Notes/_build/.jupyter_cache
+locale_dir /home/skshukla/Documents/GitHub/LLM-Notes/locales/en/LC_MESSAGES does not exists
+[01mbuilding [mo]: [39;49;00mtargets for 0 po files that are out of date
+[01mbuilding [html]: [39;49;00mtargets for 204 source files that are out of date
+[01mupdating environment: [39;49;00mlocale_dir /home/skshukla/Documents/GitHub/LLM-Notes/locales/en/LC_MESSAGES does not exists
+[new config] 204 added, 0 changed, 0 removed
+[01mreading sources... [39;49;00m[  0%] [35m.venv/lib/python3.12/site-packages/a11y_pygments/a11y_dark/README[39;49;00m
+[01mreading sources... [39;49;00m[  0%] [35m.venv/lib/python3.12/site-packages/a11y_pygments/a11y_high_contrast_dark/README[39;49;00m
+[01mreading sources... [39;49;00m[  1%] [35m.venv/lib/python3.12/site-packages/a11y_pygments/a11y_high_contrast_light/README[39;49;00m
+[01mreading sources... [39;49;00m[  1%] [35m.venv/lib/python3.12/site-packages/a11y_pygments/a11y_light/README[39;49;00m
+[01mreading sources... [39;49;00m[  2%] [35m.venv/lib/python3.12/site-packages/a11y_pygments/blinds_dark/README[39;49;00m
+[01mreading sources... [39;49;00m[  2%] [35m.venv/lib/python3.12/site-packages/a11y_pygments/blinds_light/README[39;49;00m
+[01mreading sources... [39;49;00m[  3%] [35m.venv/lib/python3.12/site-packages/a11y_pygments/github_dark/README[39;49;00m
+[01mreading sources... [39;49;00m[  3%] [35m.venv/lib/python3.12/site-packages/a11y_pygments/github_dark_colorblind/README[39;49;00m
+[01mreading sources... [39;49;00m[  4%] [35m.venv/lib/python3.12/site-packages/a11y_pygments/github_dark_high_contrast/README[39;49;00m
+[01mreading sources... [39;49;00m[  4%] [35m.venv/lib/python3.12/site-packages/a11y_pygments/github_light/README[39;49;00m
+[01mreading sources... [39;49;00m[  5%] [35m.venv/lib/python3.12/site-packages/a11y_pygments/github_light_colorblind/README[39;49;00m
+[01mreading sources... [39;49;00m[  5%] [35m.venv/lib/python3.12/site-packages/a11y_pygments/github_light_high_contrast/README[39;49;00m
+[01mreading sources... [39;49;00m[  6%] [35m.venv/lib/python3.12/site-packages/a11y_pygments/gotthard_dark/README[39;49;00m
+[01mreading sources... [39;49;00m[  6%] [35m.venv/lib/python3.12/site-packages/a11y_pygments/gotthard_light/README[39;49;00m
+[01mreading sources... [39;49;00m[  7%] [35m.venv/lib/python3.12/site-packages/a11y_pygments/greative/README[39;49;00m
+[01mreading sources... [39;49;00m[  7%] [35m.venv/lib/python3.12/site-packages/a11y_pygments/pitaya_smoothie/README[39;49;00m
+[01mreading sources... [39;49;00m[  8%] [35m.venv/lib/python3.12/site-packages/alabaster-0.7.16.dist-info/LICENSE[39;49;00m
+[01mreading sources... [39;49;00m[  8%] [35m.venv/lib/python3.12/site-packages/bleach/_vendor/README[39;49;00m
+[01mreading sources... [39;49;00m[  9%] [35m.venv/lib/python3.12/site-packages/bleach/_vendor/html5lib-1.1.dist-info/AUTHORS[39;49;00m
+[01mreading sources... [39;49;00m[  9%] [35m.venv/lib/python3.12/site-packages/cuda/pathfinder/README[39;49;00m
+[01mreading sources... [39;49;00m[ 10%] [35m.venv/lib/python3.12/site-packages/debugpy/_vendored/pydevd/pydevd_plugins/extensions/README[39;49;00m
+[01mreading sources... [39;49;00m[ 10%] [35m.venv/lib/python3.12/site-packages/httpcore-1.0.9.dist-info/licenses/LICENSE[39;49;00m
+[01mreading sources... [39;49;00m[ 11%] [35m.venv/lib/python3.12/site-packages/httpx-0.28.1.dist-info/licenses/LICENSE[39;49;00m
+[01mreading sources... [39;49;00m[ 11%] [35m.venv/lib/python3.12/site-packages/huggingface_hub/templates/datasetcard_template[39;49;00m
+[91m/home/skshukla/Documents/GitHub/LLM-Notes/.venv/lib/python3.12/site-packages/cuda/pathfinder/README.md:1: WARNING: Document headings start at H3, not H1 [myst.header][39;49;00m
+
+[91mException occurred:[39;49;00m
+  File "/home/skshukla/Documents/GitHub/LLM-Notes/.venv/lib/python3.12/site-packages/yaml/constructor.py", line 141, in construct_mapping
+    raise ConstructorError("while constructing a mapping", node.start_mark,
+yaml.constructor.ConstructorError: while constructing a mapping
+  in "<unicode string>", line 3, column 1:
+    {{ card_data }}
+    ^
+found unhashable key
+  in "<unicode string>", line 3, column 2:
+    {{ card_data }}
+     ^
+[91mThe full traceback has been saved in /tmp/sphinx-err-e6c0cm2p.log, if you want to report the issue to the developers.[39;49;00m
+Please also report this if it was a user error, so that a better error message can be provided next time.
+A bug report can be filed in the tracker at <https://github.com/sphinx-doc/sphinx/issues>. Thanks!
+Traceback (most recent call last):
+  File "/home/skshukla/Documents/GitHub/LLM-Notes/.venv/lib/python3.12/site-packages/jupyter_book/sphinx.py", line 171, in build_sphinx
+    app.build(force_all, filenames)
+  File "/home/skshukla/Documents/GitHub/LLM-Notes/.venv/lib/python3.12/site-packages/sphinx/application.py", line 329, in build
+    self.builder.build_update()
+  File "/home/skshukla/Documents/GitHub/LLM-Notes/.venv/lib/python3.12/site-packages/sphinx/builders/__init__.py", line 288, in build_update
+    self.build(to_build,
+  File "/home/skshukla/Documents/GitHub/LLM-Notes/.venv/lib/python3.12/site-packages/sphinx/builders/__init__.py", line 302, in build
+    updated_docnames = set(self.read())
+                           ^^^^^^^^^^^
+  File "/home/skshukla/Documents/GitHub/LLM-Notes/.venv/lib/python3.12/site-packages/sphinx/builders/__init__.py", line 409, in read
+    self._read_serial(docnames)
+  File "/home/skshukla/Documents/GitHub/LLM-Notes/.venv/lib/python3.12/site-packages/sphinx/builders/__init__.py", line 430, in _read_serial
+    self.read_doc(docname)
+  File "/home/skshukla/Documents/GitHub/LLM-Notes/.venv/lib/python3.12/site-packages/sphinx/builders/__init__.py", line 483, in read_doc
+    publisher.publish()
+  File "/home/skshukla/Documents/GitHub/LLM-Notes/.venv/lib/python3.12/site-packages/docutils/core.py", line 217, in publish
+    self.document = self.reader.read(self.source, self.parser,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skshukla/Documents/GitHub/LLM-Notes/.venv/lib/python3.12/site-packages/sphinx/io.py", line 103, in read
+    self.parse()
+  File "/home/skshukla/Documents/GitHub/LLM-Notes/.venv/lib/python3.12/site-packages/docutils/readers/__init__.py", line 78, in parse
+    self.parser.parse(self.input, document)
+  File "/home/skshukla/Documents/GitHub/LLM-Notes/.venv/lib/python3.12/site-packages/myst_nb/sphinx_.py", line 86, in parse
+    return super().parse(inputstring, document)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skshukla/Documents/GitHub/LLM-Notes/.venv/lib/python3.12/site-packages/myst_parser/parsers/sphinx_.py", line 57, in parse
+    topmatter = read_topmatter(inputstring)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skshukla/Documents/GitHub/LLM-Notes/.venv/lib/python3.12/site-packages/myst_parser/config/main.py", line 403, in read_topmatter
+    metadata = yaml.safe_load("".join(top_matter))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skshukla/Documents/GitHub/LLM-Notes/.venv/lib/python3.12/site-packages/yaml/__init__.py", line 125, in safe_load
+    return load(stream, SafeLoader)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skshukla/Documents/GitHub/LLM-Notes/.venv/lib/python3.12/site-packages/yaml/__init__.py", line 81, in load
+    return loader.get_single_data()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skshukla/Documents/GitHub/LLM-Notes/.venv/lib/python3.12/site-packages/yaml/constructor.py", line 51, in get_single_data
+    return self.construct_document(node)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skshukla/Documents/GitHub/LLM-Notes/.venv/lib/python3.12/site-packages/yaml/constructor.py", line 60, in construct_document
+    for dummy in generator:
+  File "/home/skshukla/Documents/GitHub/LLM-Notes/.venv/lib/python3.12/site-packages/yaml/constructor.py", line 413, in construct_yaml_map
+    value = self.construct_mapping(node)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skshukla/Documents/GitHub/LLM-Notes/.venv/lib/python3.12/site-packages/yaml/constructor.py", line 218, in construct_mapping
+    return super().construct_mapping(node, deep=deep)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skshukla/Documents/GitHub/LLM-Notes/.venv/lib/python3.12/site-packages/yaml/constructor.py", line 141, in construct_mapping
+    raise ConstructorError("while constructing a mapping", node.start_mark,
+yaml.constructor.ConstructorError: while constructing a mapping
+  in "<unicode string>", line 3, column 1:
+    {{ card_data }}
+    ^
+found unhashable key
+  in "<unicode string>", line 3, column 2:
+    {{ card_data }}
+     ^
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/skshukla/Documents/GitHub/LLM-Notes/.venv/bin/jupyter-book", line 6, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/home/skshukla/Documents/GitHub/LLM-Notes/.venv/lib/python3.12/site-packages/click/core.py", line 1569, in __call__
+    return self.main(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skshukla/Documents/GitHub/LLM-Notes/.venv/lib/python3.12/site-packages/click/core.py", line 1490, in main
+    rv = self.invoke(ctx)
+         ^^^^^^^^^^^^^^^^
+  File "/home/skshukla/Documents/GitHub/LLM-Notes/.venv/lib/python3.12/site-packages/click/core.py", line 1970, in invoke
+    return _process_result(sub_ctx.command.invoke(sub_ctx))
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skshukla/Documents/GitHub/LLM-Notes/.venv/lib/python3.12/site-packages/click/core.py", line 1353, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skshukla/Documents/GitHub/LLM-Notes/.venv/lib/python3.12/site-packages/click/core.py", line 907, in invoke
+    return callback(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skshukla/Documents/GitHub/LLM-Notes/.venv/lib/python3.12/site-packages/jupyter_book/cli/main.py", line 317, in build
+    builder_specific_actions(
+  File "/home/skshukla/Documents/GitHub/LLM-Notes/.venv/lib/python3.12/site-packages/jupyter_book/cli/main.py", line 525, in builder_specific_actions
+    raise RuntimeError(_message_box(msg, color="red", doprint=False)) from result
+RuntimeError: 
+[91m===============================================================================[0m
+
+There was an error in building your book. Look above for the cause.
+
+[91m===============================================================================[0m
+
