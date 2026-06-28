@@ -3,7 +3,6 @@ site/
 __pycache__/
 .venv
 *.venv
-*.github
 *.nbconvert.ipynb
 _build/
 .ipynb_checkpoints/
