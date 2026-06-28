@@ -2,17 +2,27 @@ format: jb-book
 
 root: intro
 
-chapters:
-  - file: week01/transformers
-  - file: week02/parameters_flops_language_modeling
-  - file: week03/causal_language_modeling_gpt
-  - file: week04/bert_tokenization
-  - file: week05/t5_text_to_text
-  - file: week06/data_architecture_scaling
-  - file: week07/training_optimizers
-  - file: week08/fine_tuning
-  - file: week09/benchmarks
-  - file: week10/training_large_models
-  - file: week11/scaling_laws
-  - file: week12/recent_advances
-  - file: summary/cheatsheet
+parts:
+  - caption: Foundations
+    chapters:
+      - file: week01/transformers
+      - file: week02/parameters_flops_language_modeling
+      - file: week03/causal_language_modeling_gpt
+  - caption: Transformer Models
+    chapters:
+      - file: week04/bert_tokenization
+      - file: week05/t5_text_to_text
+  - caption: Training
+    chapters:
+      - file: week06/data_architecture_scaling
+      - file: week07/training_optimizers
+      - file: week08/fine_tuning
+  - caption: Evaluation
+    chapters:
+      - file: week09/benchmarks
+      - file: week10/training_large_models
+      - file: week11/scaling_laws
+      - file: week12/recent_advances
+  - caption: Quick Reference
+    chapters:
+      - file: summary/cheatsheet
