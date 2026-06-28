@@ -4,7 +4,6 @@ __pycache__/
 .venv
 *.venv
 *.nbconvert.ipynb
-_build/
 .ipynb_checkpoints/
 -ipynb
 

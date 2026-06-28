@@ -1,0 +1,1467 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Week 01: Transformers &#8212; LLM Notes</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'week01/transformers';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Week 02: Parameters, Computational Complexity, FLOPs and Language Modeling" href="../week02/parameters_flops_language_modeling.html" />
+    <link rel="prev" title="Introduction" href="../intro.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">LLM Notes</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Introduction
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Foundations</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Week 01: Transformers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../week02/parameters_flops_language_modeling.html">Week 02: Parameters, Computational Complexity, FLOPs and Language Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../week03/causal_language_modeling_gpt.html">Week3: Casual Language Modeling GPT</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Transformer Models</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../week04/bert_tokenization.html">Week04 Bert Tokenization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../week05/t5_text_to_text.html">T5 Text-to-Text</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Training</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../week06/data_architecture_scaling.html">Week06 Data Architecture Scalling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../week07/training_optimizers.html">Week07 Training Optimzers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../week08/fine_tuning.html">Week08 Fine Tunning</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Evaluation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../week09/benchmarks.html">Week09 Benchmarks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../week10/training_large_models.html">Week10 Traning Large Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../week11/scaling_laws.html">Week11 Scaling Laws</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../week12/recent_advances.html">Week12 Recent Advances</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Quick Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../summary/cheatsheet.html">Summar and Cheat Sheet</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/susheelshukla/LLM-Notes" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/susheelshukla/LLM-Notes/issues/new?title=Issue%20on%20page%20%2Fweek01/transformers.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/week01/transformers.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Week 01: Transformers</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-objectives">Learning Objectives</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-concepts">Key Concepts</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#evolution-of-sequence-models">Evolution of Sequence Models</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#transformer-components">Transformer Components</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#types-of-attention">Types of Attention</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mathematical-foundation">Mathematical Foundation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#attention-equation">Attention Equation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-1-similarity-score">Step 1: Similarity Score</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-2-scaling">Step 2: Scaling</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-3-softmax">Step 3: Softmax</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-4-weighted-sum">Step 4: Weighted Sum</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#architecture-diagram">Architecture Diagram</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#transformer-architecture">Transformer Architecture</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#encoder-decoder-structure">Encoder-Decoder Structure</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#image01-encoderdecoder-png"></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#detailed-explanation">Detailed Explanation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-transformers">Why Transformers?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#self-attention">Self Attention</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#image02-selfandmultiheadattension-png"></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cross-attention">Cross Attention</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#masked-attention">Masked Attention</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#positional-encoding">Positional Encoding</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples-with-solution">Examples with solution</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-statement">Problem Statement</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#q1-what-is-the-minimum-context-length-window-t">Q1. What is the minimum context length (window) T?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#q2-what-is-the-dimension-of-the-encoder-input-tensor">Q2. What is the dimension of the encoder input tensor?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#q3-number-of-parameters-in-multi-head-attention">Q3. Number of parameters in Multi-Head Attention</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#verification-using-python">Verification Using Python</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-learning">Key Learning</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#python-demonstration">Python Demonstration</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-self-attention">Basic Self-Attention</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hugging-face-example">Hugging Face Example</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#industry-perspective">Industry Perspective</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#applications">Applications</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#chatgpt">ChatGPT</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bert">BERT</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#t5">T5</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interview-questions">Interview Questions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#conceptual">Conceptual</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mathematical">Mathematical</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#practical">Practical</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-takeaways">Key Takeaways</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#research-papers">Research Papers</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#attention-is-all-you-need-2017">Attention Is All You Need (2017)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bert-pre-training-of-deep-bidirectional-transformers-for-language-understanding-2018">BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding (2018)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gpt-3-language-models-are-few-shot-learners-2020">GPT-3: Language Models are Few-Shot Learners (2020)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#t5-exploring-the-limits-of-transfer-learning-with-a-unified-text-to-text-transformer-2020">T5: Exploring the Limits of Transfer Learning with a Unified Text-to-Text Transformer (2020)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#sentencepiece-a-simple-and-language-independent-subword-tokenizer-2018">SentencePiece: A Simple and Language Independent Subword Tokenizer (2018)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#palm-scaling-language-modeling-with-pathways-2022">PaLM: Scaling Language Modeling with Pathways (2022)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#chinchilla-training-compute-optimal-large-language-models-2022">Chinchilla: Training Compute-Optimal Large Language Models (2022)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#lora-low-rank-adaptation-of-large-language-models-2021">LoRA: Low-Rank Adaptation of Large Language Models (2021)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qlora-efficient-finetuning-of-quantized-llms-2023">QLoRA: Efficient Finetuning of Quantized LLMs (2023)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#llama-3-technical-report-2024">Llama 3 Technical Report (2024)</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation">Documentation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">Further Reading</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="week-01-transformers">
+<h1>Week 01: Transformers<a class="headerlink" href="#week-01-transformers" title="Permalink to this heading">#</a></h1>
+<section id="learning-objectives">
+<h2>Learning Objectives<a class="headerlink" href="#learning-objectives" title="Permalink to this heading">#</a></h2>
+<p>By the end of this chapter, you should be able to:</p>
+<ul class="simple">
+<li><p>Understand why Transformers were introduced.</p></li>
+<li><p>Explain limitations of RNNs and LSTMs.</p></li>
+<li><p>Understand Self-Attention and its purpose.</p></li>
+<li><p>Differentiate between Self-Attention and Cross-Attention.</p></li>
+<li><p>Explain Masked Attention.</p></li>
+<li><p>Understand Positional Encoding.</p></li>
+<li><p>Understand Multi-Head Attention.</p></li>
+<li><p>Interpret Transformer architecture diagrams.</p></li>
+<li><p>Calculate attention scores manually.</p></li>
+<li><p>Implement simple attention mechanisms in Python.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="key-concepts">
+<h2>Key Concepts<a class="headerlink" href="#key-concepts" title="Permalink to this heading">#</a></h2>
+<section id="evolution-of-sequence-models">
+<h3>Evolution of Sequence Models<a class="headerlink" href="#evolution-of-sequence-models" title="Permalink to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Model</p></th>
+<th class="head"><p>Advantage</p></th>
+<th class="head"><p>Limitation</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>RNN</p></td>
+<td><p>Sequential processing</p></td>
+<td><p>Vanishing gradients</p></td>
+</tr>
+<tr class="row-odd"><td><p>LSTM</p></td>
+<td><p>Better long-range memory</p></td>
+<td><p>Slow training</p></td>
+</tr>
+<tr class="row-even"><td><p>GRU</p></td>
+<td><p>Simpler than LSTM</p></td>
+<td><p>Sequential bottleneck</p></td>
+</tr>
+<tr class="row-odd"><td><p>Transformer</p></td>
+<td><p>Parallel processing</p></td>
+<td><p>High memory usage</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="transformer-components">
+<h3>Transformer Components<a class="headerlink" href="#transformer-components" title="Permalink to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p>Input Embeddings</p></li>
+<li><p>Positional Encoding</p></li>
+<li><p>Self-Attention</p></li>
+<li><p>Multi-Head Attention</p></li>
+<li><p>Feed Forward Network</p></li>
+<li><p>Residual Connections</p></li>
+<li><p>Layer Normalization</p></li>
+</ol>
+</section>
+<section id="types-of-attention">
+<h3>Types of Attention<a class="headerlink" href="#types-of-attention" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Self Attention</p></li>
+<li><p>Cross Attention</p></li>
+<li><p>Masked Attention</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="mathematical-foundation">
+<h2>Mathematical Foundation<a class="headerlink" href="#mathematical-foundation" title="Permalink to this heading">#</a></h2>
+<section id="attention-equation">
+<h3>Attention Equation<a class="headerlink" href="#attention-equation" title="Permalink to this heading">#</a></h3>
+<div class="math notranslate nohighlight">
+\[
+Attention(Q,K,V) = softmax\left(\frac{QK^T}{\sqrt{d_k}}\right)V
+\]</div>
+<p>Where:</p>
+<ul class="simple">
+<li><p>Q = Query</p></li>
+<li><p>K = Key</p></li>
+<li><p>V = Value</p></li>
+<li><p>d_k = Dimension of key vectors</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="step-1-similarity-score">
+<h3>Step 1: Similarity Score<a class="headerlink" href="#step-1-similarity-score" title="Permalink to this heading">#</a></h3>
+<div class="math notranslate nohighlight">
+\[
+Score = QK^T
+\]</div>
+<p>Measures similarity between tokens.</p>
+</section>
+<hr class="docutils" />
+<section id="step-2-scaling">
+<h3>Step 2: Scaling<a class="headerlink" href="#step-2-scaling" title="Permalink to this heading">#</a></h3>
+<div class="math notranslate nohighlight">
+\[
+\frac{QK^T}{\sqrt{d_k}}
+\]</div>
+<p>Prevents extremely large values.</p>
+</section>
+<hr class="docutils" />
+<section id="step-3-softmax">
+<h3>Step 3: Softmax<a class="headerlink" href="#step-3-softmax" title="Permalink to this heading">#</a></h3>
+<div class="math notranslate nohighlight">
+\[
+softmax(x_i) = \frac{e^{x_i}} {\sum_j e^{x_j}}
+\]</div>
+<p>Converts scores into probabilities.</p>
+</section>
+<hr class="docutils" />
+<section id="step-4-weighted-sum">
+<h3>Step 4: Weighted Sum<a class="headerlink" href="#step-4-weighted-sum" title="Permalink to this heading">#</a></h3>
+<div class="math notranslate nohighlight">
+\[
+\text{Output} = \text{AttentionWeights} \times {V}
+\]</div>
+<p>Produces contextualized representation.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="architecture-diagram">
+<h2>Architecture Diagram<a class="headerlink" href="#architecture-diagram" title="Permalink to this heading">#</a></h2>
+<section id="transformer-architecture">
+<h3>Transformer Architecture<a class="headerlink" href="#transformer-architecture" title="Permalink to this heading">#</a></h3>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>      Input Tokens
+          │
+          ▼
+      Embeddings
+          │
+          ▼
+    Positional Encoding
+          │
+          ▼
+    Multi Head Attention
+          │
+          ▼
+      Add &amp; Norm
+          │
+          ▼
+    Feed Forward Network
+          │
+          ▼
+      Add &amp; Norm
+          │
+          ▼
+        Output
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="encoder-decoder-structure">
+<h3>Encoder-Decoder Structure<a class="headerlink" href="#encoder-decoder-structure" title="Permalink to this heading">#</a></h3>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Encoder
+  ├── Self Attention
+  ├── Feed Forward
+  └── Context Vector
+
+Decoder
+  ├── Masked Attention
+  ├── Cross Attention
+  ├── Feed Forward
+  └── Prediction
+</pre></div>
+</div>
+</section>
+</section>
+<section id="image01-encoderdecoder-png">
+<h2><img alt="image01-encoderdecoder.png" src="week01/attachment:image01-encoderdecoder.png" /><a class="headerlink" href="#image01-encoderdecoder-png" title="Permalink to this heading">#</a></h2>
+</section>
+<section id="detailed-explanation">
+<h2>Detailed Explanation<a class="headerlink" href="#detailed-explanation" title="Permalink to this heading">#</a></h2>
+<section id="why-transformers">
+<h3>Why Transformers?<a class="headerlink" href="#why-transformers" title="Permalink to this heading">#</a></h3>
+<p>Traditional RNNs process sequences one token at a time.</p>
+<p>Example:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>I → love → learning → transformers
+</pre></div>
+</div>
+<p>Each word waits for the previous word.</p>
+<p>Problems:</p>
+<ul class="simple">
+<li><p>Slow training</p></li>
+<li><p>Difficult long-range dependencies</p></li>
+<li><p>Limited parallelization</p></li>
+</ul>
+<p>Transformers solve these issues using attention mechanisms.</p>
+</section>
+<hr class="docutils" />
+<section id="self-attention">
+<h3>Self Attention<a class="headerlink" href="#self-attention" title="Permalink to this heading">#</a></h3>
+<p>Each token looks at every other token.</p>
+<p>Sentence:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>The animal didn&#39;t cross the street because it was tired.
+</pre></div>
+</div>
+<p>The model learns:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>it → animal
+</pre></div>
+</div>
+<p>through attention weights.</p>
+</section>
+</section>
+<section id="image02-selfandmultiheadattension-png">
+<h2><img alt="image02-selfandmultiheadattension.png" src="week01/attachment:image02-selfandmultiheadattension.png" /><a class="headerlink" href="#image02-selfandmultiheadattension-png" title="Permalink to this heading">#</a></h2>
+<section id="cross-attention">
+<h3>Cross Attention<a class="headerlink" href="#cross-attention" title="Permalink to this heading">#</a></h3>
+<p>Used in encoder-decoder models.</p>
+<p>Example:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>English:
+I love AI
+
+French:
+J&#39;aime l&#39;IA
+</pre></div>
+</div>
+<p>Decoder attends to encoder outputs.</p>
+</section>
+<hr class="docutils" />
+<section id="masked-attention">
+<h3>Masked Attention<a class="headerlink" href="#masked-attention" title="Permalink to this heading">#</a></h3>
+<p>Prevents future token leakage.</p>
+<p>Example:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>I love ______
+</pre></div>
+</div>
+<p>Prediction must not see future words.</p>
+<p>Used in GPT.</p>
+</section>
+<hr class="docutils" />
+<section id="positional-encoding">
+<h3>Positional Encoding<a class="headerlink" href="#positional-encoding" title="Permalink to this heading">#</a></h3>
+<p>Transformers have no natural notion of order.</p>
+<p>Positional encoding injects position information.</p>
+<p>Example:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Word  Position
+
+I      1
+love   2
+AI     3
+</pre></div>
+</div>
+<p>Sinusoidal encoding:</p>
+<div class="math notranslate nohighlight">
+\[
+PE(pos,2i) = sin\left(\frac{pos}{10000^{2i/d}}\right)
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+PE(pos,2i+1) = cos\left(\frac{pos}{10000^{2i/d}}\right)
+\]</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="examples-with-solution">
+<h2>Examples with solution<a class="headerlink" href="#examples-with-solution" title="Permalink to this heading">#</a></h2>
+<ul>
+<li><p>Sentence: <code class="docutils literal notranslate"><span class="pre">Machine</span> <span class="pre">Learning</span> <span class="pre">is</span> <span class="pre">powerful</span></code></p></li>
+<li><p>Assume:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Q = [1,0]
+K = [1,1]
+V = [2,3]
+</pre></div>
+</div>
+</li>
+<li><p>Similarity : <span class="math notranslate nohighlight">\(QK^T = 1(1)+0(1) = 1\)</span></p></li>
+<li><p>Scaling : <span class="math notranslate nohighlight">\(\frac{1}{\sqrt2} = 0.707\)</span></p></li>
+<li><p>Softmax : <span class="math notranslate nohighlight">\(softmax(0.707) = 1\)</span></p></li>
+<li><p>Output : <span class="math notranslate nohighlight">\(1 \times [2,3] = [2,3]\)</span></p></li>
+<li><p>Final attention output : <code class="docutils literal notranslate"><span class="pre">[2,3]</span></code></p></li>
+</ul>
+<hr class="docutils" />
+<section id="problem-statement">
+<h3>Problem Statement<a class="headerlink" href="#problem-statement" title="Permalink to this heading">#</a></h3>
+<p>A dataset contains four samples:</p>
+<ol class="arabic simple">
+<li><p>I enjoyed the movie Transformers</p></li>
+<li><p>We live among its people now</p></li>
+<li><p>They have much to learn</p></li>
+<li><p>Freedom is the right of all sentient beings</p></li>
+</ol>
+<p>Each word embedding has dimension: <span class="math notranslate nohighlight">\(\mathbb{R}^{1 \times 256}\)</span></p>
+<p>The transformer processes each sequence in its entirety.</p>
+<p>Projection matrices: $<span class="math notranslate nohighlight">\(W_Q, W_K, W_V \in \mathbb{R}^{256 \times 64}\)</span>$</p>
+<p>Number of attention heads: <span class="math notranslate nohighlight">\(h = 4\)</span></p>
+<p>Output projection matrix: $<span class="math notranslate nohighlight">\(W_O \in \mathbb{R}^{256 \times 256}\)</span>$</p>
+</section>
+<hr class="docutils" />
+<section id="q1-what-is-the-minimum-context-length-window-t">
+<h3>Q1. What is the minimum context length (window) T?<a class="headerlink" href="#q1-what-is-the-minimum-context-length-window-t" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Step 1: Count the number of words in each sequence</p>
+<ul>
+<li><p>Sequence 1: <code class="docutils literal notranslate"><span class="pre">I</span> <span class="pre">enjoyed</span> <span class="pre">the</span> <span class="pre">movie</span> <span class="pre">Transformers</span></code></p>
+<ul>
+<li><p>Number of words: <span class="math notranslate nohighlight">\(5\)</span></p></li>
+</ul>
+</li>
+<li><p>Sequence 2: <code class="docutils literal notranslate"><span class="pre">We</span> <span class="pre">live</span> <span class="pre">among</span> <span class="pre">its</span> <span class="pre">people</span> <span class="pre">now</span></code></p>
+<ul>
+<li><p>Number of words: <span class="math notranslate nohighlight">\(6\)</span></p></li>
+</ul>
+</li>
+<li><p>Sequence 3: <code class="docutils literal notranslate"><span class="pre">They</span> <span class="pre">have</span> <span class="pre">much</span> <span class="pre">to</span> <span class="pre">learn</span></code></p>
+<ul>
+<li><p>Number of words: <span class="math notranslate nohighlight">\(5\)</span></p></li>
+</ul>
+</li>
+<li><p>Sequence 4: <code class="docutils literal notranslate"><span class="pre">Freedom</span> <span class="pre">is</span> <span class="pre">the</span> <span class="pre">right</span> <span class="pre">of</span> <span class="pre">all</span> <span class="pre">sentient</span> <span class="pre">beings</span></code></p>
+<ul>
+<li><p>Number of words: <span class="math notranslate nohighlight">\(8\)</span></p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Step 2: Determine Context Length</p>
+<ul>
+<li><p>The transformer must process the longest sequence completely.</p></li>
+<li><p>Therefore: <span class="math notranslate nohighlight">\(T = \max(5,6,5,8)\)</span></p></li>
+</ul>
+</li>
+</ul>
+<p><strong>Answer:</strong> <span class="math notranslate nohighlight">\(\boxed{T = 8}\)</span></p>
+<p>The minimum context window required is: <code class="docutils literal notranslate"><span class="pre">8</span> <span class="pre">tokens</span></code></p>
+</section>
+<hr class="docutils" />
+<section id="q2-what-is-the-dimension-of-the-encoder-input-tensor">
+<h3>Q2. What is the dimension of the encoder input tensor?<a class="headerlink" href="#q2-what-is-the-dimension-of-the-encoder-input-tensor" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Given</p>
+<ul>
+<li><p>Embedding dimension: <span class="math notranslate nohighlight">\(d_{model}=256\)</span></p></li>
+<li><p>Batch size: There are 4 sequences. <span class="math notranslate nohighlight">\(B=4\)</span></p></li>
+<li><p>Context length: <span class="math notranslate nohighlight">\(T=8\)</span></p></li>
+</ul>
+</li>
+<li><p>Transformer Input Shape</p>
+<ul>
+<li><p>Transformer encoders typically accept: <span class="math notranslate nohighlight">\((B,T,d_{model})\)</span> where</p>
+<ul>
+<li><p>B = batch size</p></li>
+<li><p>T = sequence length</p></li>
+<li><p>d_model = embedding dimension</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Substituting values: <span class="math notranslate nohighlight">\((4,8,256)\)</span></p></li>
+</ul>
+<p><strong>Answer:</strong> <span class="math notranslate nohighlight">\(\boxed{(4,8,256)}\)</span></p>
+<p>Input tensor shape: <code class="docutils literal notranslate"><span class="pre">python(batch_size,</span> <span class="pre">sequence_length,</span> <span class="pre">embedding_dimension)(4,</span> <span class="pre">8,</span> <span class="pre">256)</span></code></p>
+</section>
+<hr class="docutils" />
+<section id="q3-number-of-parameters-in-multi-head-attention">
+<h3>Q3. Number of parameters in Multi-Head Attention<a class="headerlink" href="#q3-number-of-parameters-in-multi-head-attention" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Given</p>
+<ul>
+<li><p>Number of heads: <span class="math notranslate nohighlight">\(h=4\)</span></p></li>
+<li><p>Projection matrices:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(W_Q \in \mathbb{R}^{256\times64}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(W_K \in \mathbb{R}^{256\times64}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(W_V \in \mathbb{R}^{256\times64}\)</span></p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Parameters per Head</p>
+<ul>
+<li><p>For one head:</p>
+<ul>
+<li><p>Query Matrix <span class="math notranslate nohighlight">\(256\times64 = 16384\)</span></p></li>
+<li><p>Key Matrix <span class="math notranslate nohighlight">\(256\times64 = 16384\)</span></p></li>
+<li><p>Value Matrix <span class="math notranslate nohighlight">\(256\times64\ = 16384\)</span></p></li>
+<li><p>Total : <span class="math notranslate nohighlight">\(16384 + 16384 + 16384 = 49152\)</span></p></li>
+</ul>
+</li>
+<li><p>Four Attention Heads <span class="math notranslate nohighlight">\(4\times49152 = 196608\)</span></p></li>
+<li><p>Output Projection</p>
+<ul>
+<li><p>Given: <span class="math notranslate nohighlight">\(W_O \in \mathbb{R}^{256\times256}\)</span></p></li>
+<li><p>Parameters: <span class="math notranslate nohighlight">\(256\times256 = 5536\)</span></p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Total Multi-Head Attention Parameters: <span class="math notranslate nohighlight">\(196608 + 65536 = 262144\)</span></p></li>
+</ul>
+<p><strong>Answer:</strong> <span class="math notranslate nohighlight">\(\boxed{262144}\)</span></p>
+<p>Total parameters: <code class="docutils literal notranslate"><span class="pre">262,144</span></code></p>
+</section>
+<hr class="docutils" />
+<section id="verification-using-python">
+<h3>Verification Using Python<a class="headerlink" href="#verification-using-python" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">embedding_dim</span> <span class="o">=</span> <span class="mi">256</span>
+<span class="n">head_dim</span> <span class="o">=</span> <span class="mi">64</span>
+<span class="n">num_heads</span> <span class="o">=</span> <span class="mi">4</span>
+
+<span class="n">q_params</span> <span class="o">=</span> <span class="n">embedding_dim</span> <span class="o">*</span> <span class="n">head_dim</span>
+<span class="n">k_params</span> <span class="o">=</span> <span class="n">embedding_dim</span> <span class="o">*</span> <span class="n">head_dim</span>
+<span class="n">v_params</span> <span class="o">=</span> <span class="n">embedding_dim</span> <span class="o">*</span> <span class="n">head_dim</span>
+
+<span class="n">per_head</span> <span class="o">=</span> <span class="n">q_params</span> <span class="o">+</span> <span class="n">k_params</span> <span class="o">+</span> <span class="n">v_params</span>
+
+<span class="n">all_heads</span> <span class="o">=</span> <span class="n">num_heads</span> <span class="o">*</span> <span class="n">per_head</span>
+
+<span class="n">wo_params</span> <span class="o">=</span> <span class="n">embedding_dim</span> <span class="o">*</span> <span class="n">embedding_dim</span>
+
+<span class="n">total</span> <span class="o">=</span> <span class="n">all_heads</span> <span class="o">+</span> <span class="n">wo_params</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Per Head Parameters :&quot;</span><span class="p">,</span> <span class="n">per_head</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;All Heads Parameters:&quot;</span><span class="p">,</span> <span class="n">all_heads</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;WO Parameters       :&quot;</span><span class="p">,</span> <span class="n">wo_params</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Total Parameters    :&quot;</span><span class="p">,</span> <span class="n">total</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Expected Output:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Per Head Parameters : 49152
+All Heads Parameters: 196608
+WO Parameters       : 65536
+Total Parameters    : 262144
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="key-learning">
+<h3>Key Learning<a class="headerlink" href="#key-learning" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>For a transformer: <span class="math notranslate nohighlight">\(\text{Input Shape} = (B,T,d_{model})\)</span></p></li>
+<li><p>Multi-head attention parameters: <span class="math notranslate nohighlight">\(h\times \left(W_Q + W_K + W_V\right) + W_O\)</span></p></li>
+<li><p>Understanding these calculations is essential for estimating memory usage, model size, and computational cost in modern LLMs.</p></li>
+</ul>
+</section>
+</section>
+<section id="python-demonstration">
+<h2>Python Demonstration<a class="headerlink" href="#python-demonstration" title="Permalink to this heading">#</a></h2>
+<section id="basic-self-attention">
+<h3>Basic Self-Attention<a class="headerlink" href="#basic-self-attention" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="n">Q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span>
+<span class="n">K</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]])</span>
+<span class="n">V</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]])</span>
+
+<span class="n">scores</span> <span class="o">=</span> <span class="n">Q</span> <span class="o">@</span> <span class="n">K</span><span class="o">.</span><span class="n">T</span>
+
+<span class="n">scaled_scores</span> <span class="o">=</span> <span class="n">scores</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">K</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+<span class="n">weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">scaled_scores</span><span class="p">)</span>
+<span class="n">weights</span> <span class="o">=</span> <span class="n">weights</span> <span class="o">/</span> <span class="n">weights</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+
+<span class="n">output</span> <span class="o">=</span> <span class="n">weights</span> <span class="o">@</span> <span class="n">V</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[[2. 3.]]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="hugging-face-example">
+<h3>Hugging Face Example<a class="headerlink" href="#hugging-face-example" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">transformers</span><span class="w"> </span><span class="kn">import</span> <span class="n">AutoTokenizer</span>
+
+<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
+    <span class="s2">&quot;bert-base-uncased&quot;</span>
+<span class="p">)</span>
+
+<span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;Transformers changed NLP&quot;</span>
+
+<span class="n">tokens</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;input_ids&#39;: [101, 19081, 2904, 17953, 2361, 102], &#39;token_type_ids&#39;: [0, 0, 0, 0, 0, 0], &#39;attention_mask&#39;: [1, 1, 1, 1, 1, 1]}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="industry-perspective">
+<h2>Industry Perspective<a class="headerlink" href="#industry-perspective" title="Permalink to this heading">#</a></h2>
+<section id="applications">
+<h3>Applications<a class="headerlink" href="#applications" title="Permalink to this heading">#</a></h3>
+<section id="chatgpt">
+<h4>ChatGPT<a class="headerlink" href="#chatgpt" title="Permalink to this heading">#</a></h4>
+<p>Uses:</p>
+<ul class="simple">
+<li><p>Decoder-only Transformer</p></li>
+<li><p>Masked Attention</p></li>
+<li><p>Autoregressive generation</p></li>
+</ul>
+</section>
+<section id="bert">
+<h4>BERT<a class="headerlink" href="#bert" title="Permalink to this heading">#</a></h4>
+<p>Uses:</p>
+<ul class="simple">
+<li><p>Encoder-only Transformer</p></li>
+<li><p>Bidirectional attention</p></li>
+</ul>
+<p>Applications:</p>
+<ul class="simple">
+<li><p>Search</p></li>
+<li><p>Classification</p></li>
+<li><p>Information Retrieval</p></li>
+</ul>
+</section>
+<section id="t5">
+<h4>T5<a class="headerlink" href="#t5" title="Permalink to this heading">#</a></h4>
+<p>Uses:</p>
+<ul class="simple">
+<li><p>Encoder-Decoder architecture</p></li>
+</ul>
+<p>Applications:</p>
+<ul class="simple">
+<li><p>Translation</p></li>
+<li><p>Summarization</p></li>
+<li><p>Question Answering</p></li>
+</ul>
+</section>
+</section>
+</section>
+<hr class="docutils" />
+<section id="interview-questions">
+<h2>Interview Questions<a class="headerlink" href="#interview-questions" title="Permalink to this heading">#</a></h2>
+<section id="conceptual">
+<h3>Conceptual<a class="headerlink" href="#conceptual" title="Permalink to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p>Why are Transformers faster than RNNs?</p></li>
+<li><p>What is Self-Attention?</p></li>
+<li><p>Difference between Self-Attention and Cross-Attention?</p></li>
+<li><p>Why is scaling performed in attention?</p></li>
+<li><p>Why do we need Positional Encoding?</p></li>
+<li><p>Why use Multi-Head Attention?</p></li>
+</ol>
+</section>
+<hr class="docutils" />
+<section id="mathematical">
+<h3>Mathematical<a class="headerlink" href="#mathematical" title="Permalink to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p>Derive attention formula.</p></li>
+<li><p>Explain softmax.</p></li>
+<li><p>Compute attention output manually.</p></li>
+<li><p>Why divide by √dk?</p></li>
+</ol>
+</section>
+<hr class="docutils" />
+<section id="practical">
+<h3>Practical<a class="headerlink" href="#practical" title="Permalink to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p>GPT uses which attention?</p></li>
+<li><p>BERT uses which attention?</p></li>
+<li><p>Which architecture is used in machine translation?</p></li>
+<li><p>Why is Transformer training expensive?</p></li>
+</ol>
+</section>
+</section>
+<hr class="docutils" />
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Permalink to this heading">#</a></h2>
+<section id="key-takeaways">
+<h3>Key Takeaways<a class="headerlink" href="#key-takeaways" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Transformers replaced RNNs for most NLP tasks.</p></li>
+<li><p>Attention is the core building block.</p></li>
+<li><p>Self-Attention captures token relationships.</p></li>
+<li><p>Cross-Attention connects encoder and decoder.</p></li>
+<li><p>Masked Attention enables autoregressive generation.</p></li>
+<li><p>Positional Encoding provides sequence order information.</p></li>
+<li><p>Multi-Head Attention improves representation learning.</p></li>
+<li><p>Transformers enable parallel training and large-scale learning.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="references">
+<h3>References<a class="headerlink" href="#references" title="Permalink to this heading">#</a></h3>
+<section id="research-papers">
+<h4>Research Papers<a class="headerlink" href="#research-papers" title="Permalink to this heading">#</a></h4>
+</section>
+<section id="attention-is-all-you-need-2017">
+<h4>Attention Is All You Need (2017)<a class="headerlink" href="#attention-is-all-you-need-2017" title="Permalink to this heading">#</a></h4>
+<p><strong>Authors:</strong> Ashish Vaswani et al.</p>
+<p><strong>Paper:</strong>  <a class="reference external" href="https://arxiv.org/abs/1706.03762">https://arxiv.org/abs/1706.03762</a></p>
+<div class="highlight-bibtex notranslate"><div class="highlight"><pre><span></span><span class="nc">@article</span><span class="p">{</span><span class="nl">vaswani2017attention</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="p">=</span><span class="s">{Attention Is All You Need}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="p">=</span><span class="s">{Vaswani, Ashish and others}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">journal</span><span class="p">=</span><span class="s">{Advances in Neural Information Processing Systems}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="p">=</span><span class="s">{2017}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="bert-pre-training-of-deep-bidirectional-transformers-for-language-understanding-2018">
+<h4>BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding (2018)<a class="headerlink" href="#bert-pre-training-of-deep-bidirectional-transformers-for-language-understanding-2018" title="Permalink to this heading">#</a></h4>
+<p><strong>Authors:</strong> Jacob Devlin et al.</p>
+<p><strong>Paper:</strong>  <a class="reference external" href="https://arxiv.org/abs/1810.04805">https://arxiv.org/abs/1810.04805</a></p>
+<div class="highlight-bibtex notranslate"><div class="highlight"><pre><span></span><span class="nc">@article</span><span class="p">{</span><span class="nl">devlin2018bert</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="p">=</span><span class="s">{BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="p">=</span><span class="s">{Devlin, Jacob and Chang, Ming-Wei and Lee, Kenton and Toutanova, Kristina}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="p">=</span><span class="s">{2018}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="gpt-3-language-models-are-few-shot-learners-2020">
+<h4>GPT-3: Language Models are Few-Shot Learners (2020)<a class="headerlink" href="#gpt-3-language-models-are-few-shot-learners-2020" title="Permalink to this heading">#</a></h4>
+<p><strong>Authors:</strong> Tom B. Brown et al.</p>
+<p><strong>Paper:</strong>  <a class="reference external" href="https://arxiv.org/abs/2005.14165">https://arxiv.org/abs/2005.14165</a></p>
+<div class="highlight-bibtex notranslate"><div class="highlight"><pre><span></span><span class="nc">@article</span><span class="p">{</span><span class="nl">brown2020gpt3</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="p">=</span><span class="s">{Language Models are Few-Shot Learners}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="p">=</span><span class="s">{Brown, Tom B. and others}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">journal</span><span class="p">=</span><span class="s">{Advances in Neural Information Processing Systems}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="p">=</span><span class="s">{2020}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="t5-exploring-the-limits-of-transfer-learning-with-a-unified-text-to-text-transformer-2020">
+<h4>T5: Exploring the Limits of Transfer Learning with a Unified Text-to-Text Transformer (2020)<a class="headerlink" href="#t5-exploring-the-limits-of-transfer-learning-with-a-unified-text-to-text-transformer-2020" title="Permalink to this heading">#</a></h4>
+<p><strong>Authors:</strong> Colin Raffel et al.</p>
+<p><strong>Paper:</strong>  <a class="reference external" href="https://arxiv.org/abs/1910.10683">https://arxiv.org/abs/1910.10683</a></p>
+<div class="highlight-bibtex notranslate"><div class="highlight"><pre><span></span><span class="nc">@article</span><span class="p">{</span><span class="nl">raffel2020t5</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="p">=</span><span class="s">{Exploring the Limits of Transfer Learning with a Unified Text-to-Text Transformer}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="p">=</span><span class="s">{Raffel, Colin and others}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="p">=</span><span class="s">{2020}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="sentencepiece-a-simple-and-language-independent-subword-tokenizer-2018">
+<h4>SentencePiece: A Simple and Language Independent Subword Tokenizer (2018)<a class="headerlink" href="#sentencepiece-a-simple-and-language-independent-subword-tokenizer-2018" title="Permalink to this heading">#</a></h4>
+<p><strong>Authors:</strong> Taku Kudo and John Richardson</p>
+<p><strong>Paper:</strong>  <a class="reference external" href="https://arxiv.org/abs/1808.06226">https://arxiv.org/abs/1808.06226</a></p>
+<div class="highlight-bibtex notranslate"><div class="highlight"><pre><span></span><span class="nc">@article</span><span class="p">{</span><span class="nl">kudo2018sentencepiece</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="p">=</span><span class="s">{SentencePiece: A Simple and Language Independent Subword Tokenizer and Detokenizer for Neural Text Processing}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="p">=</span><span class="s">{Kudo, Taku and Richardson, John}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="p">=</span><span class="s">{2018}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="palm-scaling-language-modeling-with-pathways-2022">
+<h4>PaLM: Scaling Language Modeling with Pathways (2022)<a class="headerlink" href="#palm-scaling-language-modeling-with-pathways-2022" title="Permalink to this heading">#</a></h4>
+<p><strong>Authors:</strong> Aakanksha Chowdhery et al.</p>
+<p><strong>Paper:</strong>  <a class="reference external" href="https://arxiv.org/abs/2204.02311">https://arxiv.org/abs/2204.02311</a></p>
+<div class="highlight-bibtex notranslate"><div class="highlight"><pre><span></span><span class="nc">@article</span><span class="p">{</span><span class="nl">chowdhery2022palm</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="p">=</span><span class="s">{PaLM: Scaling Language Modeling with Pathways}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="p">=</span><span class="s">{Chowdhery, Aakanksha and others}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="p">=</span><span class="s">{2022}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="chinchilla-training-compute-optimal-large-language-models-2022">
+<h4>Chinchilla: Training Compute-Optimal Large Language Models (2022)<a class="headerlink" href="#chinchilla-training-compute-optimal-large-language-models-2022" title="Permalink to this heading">#</a></h4>
+<p><strong>Authors:</strong> Jordan Hoffmann et al.</p>
+<p><strong>Paper:</strong>  <a class="reference external" href="https://arxiv.org/abs/2203.15556">https://arxiv.org/abs/2203.15556</a></p>
+<div class="highlight-bibtex notranslate"><div class="highlight"><pre><span></span><span class="nc">@article</span><span class="p">{</span><span class="nl">hoffmann2022chinchilla</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="p">=</span><span class="s">{Training Compute-Optimal Large Language Models}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="p">=</span><span class="s">{Hoffmann, Jordan and others}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="p">=</span><span class="s">{2022}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="lora-low-rank-adaptation-of-large-language-models-2021">
+<h4>LoRA: Low-Rank Adaptation of Large Language Models (2021)<a class="headerlink" href="#lora-low-rank-adaptation-of-large-language-models-2021" title="Permalink to this heading">#</a></h4>
+<p><strong>Authors:</strong> Edward J. Hu et al.</p>
+<p><strong>Paper:</strong>  <a class="reference external" href="https://arxiv.org/abs/2106.09685">https://arxiv.org/abs/2106.09685</a></p>
+<div class="highlight-bibtex notranslate"><div class="highlight"><pre><span></span><span class="nc">@article</span><span class="p">{</span><span class="nl">hu2021lora</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="p">=</span><span class="s">{LoRA: Low-Rank Adaptation of Large Language Models}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="p">=</span><span class="s">{Hu, Edward J. and others}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="p">=</span><span class="s">{2021}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="qlora-efficient-finetuning-of-quantized-llms-2023">
+<h4>QLoRA: Efficient Finetuning of Quantized LLMs (2023)<a class="headerlink" href="#qlora-efficient-finetuning-of-quantized-llms-2023" title="Permalink to this heading">#</a></h4>
+<p><strong>Authors:</strong> Tim Dettmers et al.</p>
+<p><strong>Paper:</strong>  <a class="reference external" href="https://arxiv.org/abs/2305.14314">https://arxiv.org/abs/2305.14314</a></p>
+<div class="highlight-bibtex notranslate"><div class="highlight"><pre><span></span><span class="nc">@article</span><span class="p">{</span><span class="nl">dettmers2023qlora</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="p">=</span><span class="s">{QLoRA: Efficient Finetuning of Quantized LLMs}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="p">=</span><span class="s">{Dettmers, Tim and others}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="p">=</span><span class="s">{2023}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="llama-3-technical-report-2024">
+<h4>Llama 3 Technical Report (2024)<a class="headerlink" href="#llama-3-technical-report-2024" title="Permalink to this heading">#</a></h4>
+<p><strong>Authors:</strong> Meta AI</p>
+<p><strong>Paper:</strong>  <a class="reference external" href="https://arxiv.org/abs/2407.21783">https://arxiv.org/abs/2407.21783</a></p>
+<div class="highlight-bibtex notranslate"><div class="highlight"><pre><span></span><span class="nc">@article</span><span class="p">{</span><span class="nl">dubey2024llama3</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="p">=</span><span class="s">{The Llama 3 Herd of Models}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="p">=</span><span class="s">{Dubey, Abhimanyu and others}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="p">=</span><span class="s">{2024}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="documentation">
+<h3>Documentation<a class="headerlink" href="#documentation" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://pytorch.org/docs/stable/">PyTorch</a></p></li>
+<li><p><a class="reference external" href="https://huggingface.co/docs/transformers/">Hugging Face Transformers</a></p></li>
+<li><p><a class="reference external" href="https://huggingface.co/docs/datasets/">Hugging Face Datasets</a></p></li>
+<li><p><a class="reference external" href="https://huggingface.co/docs/evaluate/">Hugging Face Evaluate</a></p></li>
+<li><p><a class="reference external" href="https://jupyterbook.org/">Jupyter Book</a></p></li>
+<li><p><a class="reference external" href="https://numpy.org/doc/">NumPy</a></p></li>
+<li><p><a class="reference external" href="https://pandas.pydata.org/docs/">Pandas</a></p></li>
+<li><p><a class="reference external" href="https://scikit-learn.org/stable/">Scikit-Learn</a></p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="further-reading">
+<h3>Further Reading<a class="headerlink" href="#further-reading" title="Permalink to this heading">#</a></h3>
+<ul>
+<li><p>Dive Into Deep Learning (D2L) <a class="reference external" href="https://d2l.ai/">https://d2l.ai/</a></p>
+<p>Recommended Chapters:</p>
+<ul class="simple">
+<li><p>Attention Mechanisms</p></li>
+<li><p>Transformers</p></li>
+<li><p>BERT</p></li>
+<li><p>Sequence Models</p></li>
+</ul>
+</li>
+<li><p>Stanford CS224N</p></li>
+<li><p>Natural Language Processing with Deep Learning <a class="reference external" href="https://web.stanford.edu/class/cs224n/">https://web.stanford.edu/class/cs224n/</a></p>
+<p>Recommended Lectures:</p>
+<ul class="simple">
+<li><p>Word Embeddings</p></li>
+<li><p>Attention</p></li>
+<li><p>Transformers</p></li>
+<li><p>Pretrained Language Models</p></li>
+<li><p>Large Language Models</p></li>
+</ul>
+</li>
+<li><p>The Illustrated Transformer <a class="reference external" href="https://jalammar.github.io/illustrated-transformer/">https://jalammar.github.io/illustrated-transformer/</a></p></li>
+<li><p>The Illustrated GPT-2 <a class="reference external" href="https://jalammar.github.io/illustrated-gpt2/">https://jalammar.github.io/illustrated-gpt2/</a></p></li>
+<li><p>Hugging Face NLP Course <a class="reference external" href="https://huggingface.co/learn/nlp-course/">https://huggingface.co/learn/nlp-course/</a></p></li>
+<li><p>Full Stack Deep Learning <a class="reference external" href="https://fullstackdeeplearning.com/">https://fullstackdeeplearning.com/</a></p></li>
+</ul>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./week01"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../intro.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Introduction</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../week02/parameters_flops_language_modeling.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Week 02: Parameters, Computational Complexity, FLOPs and Language Modeling</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-objectives">Learning Objectives</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-concepts">Key Concepts</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#evolution-of-sequence-models">Evolution of Sequence Models</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#transformer-components">Transformer Components</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#types-of-attention">Types of Attention</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mathematical-foundation">Mathematical Foundation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#attention-equation">Attention Equation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-1-similarity-score">Step 1: Similarity Score</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-2-scaling">Step 2: Scaling</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-3-softmax">Step 3: Softmax</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-4-weighted-sum">Step 4: Weighted Sum</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#architecture-diagram">Architecture Diagram</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#transformer-architecture">Transformer Architecture</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#encoder-decoder-structure">Encoder-Decoder Structure</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#image01-encoderdecoder-png"></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#detailed-explanation">Detailed Explanation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-transformers">Why Transformers?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#self-attention">Self Attention</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#image02-selfandmultiheadattension-png"></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cross-attention">Cross Attention</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#masked-attention">Masked Attention</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#positional-encoding">Positional Encoding</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples-with-solution">Examples with solution</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-statement">Problem Statement</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#q1-what-is-the-minimum-context-length-window-t">Q1. What is the minimum context length (window) T?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#q2-what-is-the-dimension-of-the-encoder-input-tensor">Q2. What is the dimension of the encoder input tensor?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#q3-number-of-parameters-in-multi-head-attention">Q3. Number of parameters in Multi-Head Attention</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#verification-using-python">Verification Using Python</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-learning">Key Learning</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#python-demonstration">Python Demonstration</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-self-attention">Basic Self-Attention</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hugging-face-example">Hugging Face Example</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#industry-perspective">Industry Perspective</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#applications">Applications</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#chatgpt">ChatGPT</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bert">BERT</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#t5">T5</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interview-questions">Interview Questions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#conceptual">Conceptual</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mathematical">Mathematical</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#practical">Practical</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-takeaways">Key Takeaways</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#research-papers">Research Papers</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#attention-is-all-you-need-2017">Attention Is All You Need (2017)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bert-pre-training-of-deep-bidirectional-transformers-for-language-understanding-2018">BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding (2018)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gpt-3-language-models-are-few-shot-learners-2020">GPT-3: Language Models are Few-Shot Learners (2020)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#t5-exploring-the-limits-of-transfer-learning-with-a-unified-text-to-text-transformer-2020">T5: Exploring the Limits of Transfer Learning with a Unified Text-to-Text Transformer (2020)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#sentencepiece-a-simple-and-language-independent-subword-tokenizer-2018">SentencePiece: A Simple and Language Independent Subword Tokenizer (2018)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#palm-scaling-language-modeling-with-pathways-2022">PaLM: Scaling Language Modeling with Pathways (2022)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#chinchilla-training-compute-optimal-large-language-models-2022">Chinchilla: Training Compute-Optimal Large Language Models (2022)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#lora-low-rank-adaptation-of-large-language-models-2021">LoRA: Low-Rank Adaptation of Large Language Models (2021)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qlora-efficient-finetuning-of-quantized-llms-2023">QLoRA: Efficient Finetuning of Quantized LLMs (2023)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#llama-3-technical-report-2024">Llama 3 Technical Report (2024)</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation">Documentation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">Further Reading</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Susheel Kumar Shukla
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

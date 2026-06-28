@@ -1,0 +1,1373 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Week 02: Parameters, Computational Complexity, FLOPs and Language Modeling &#8212; LLM Notes</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'week02/parameters_flops_language_modeling';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Week3: Casual Language Modeling GPT" href="../week03/causal_language_modeling_gpt.html" />
+    <link rel="prev" title="Week 01: Transformers" href="../week01/transformers.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">LLM Notes</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Introduction
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Foundations</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../week01/transformers.html">Week 01: Transformers</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Week 02: Parameters, Computational Complexity, FLOPs and Language Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../week03/causal_language_modeling_gpt.html">Week3: Casual Language Modeling GPT</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Transformer Models</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../week04/bert_tokenization.html">Week04 Bert Tokenization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../week05/t5_text_to_text.html">T5 Text-to-Text</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Training</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../week06/data_architecture_scaling.html">Week06 Data Architecture Scalling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../week07/training_optimizers.html">Week07 Training Optimzers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../week08/fine_tuning.html">Week08 Fine Tunning</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Evaluation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../week09/benchmarks.html">Week09 Benchmarks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../week10/training_large_models.html">Week10 Traning Large Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../week11/scaling_laws.html">Week11 Scaling Laws</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../week12/recent_advances.html">Week12 Recent Advances</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Quick Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../summary/cheatsheet.html">Summar and Cheat Sheet</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/susheelshukla/LLM-Notes" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/susheelshukla/LLM-Notes/issues/new?title=Issue%20on%20page%20%2Fweek02/parameters_flops_language_modeling.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/week02/parameters_flops_language_modeling.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Week 02: Parameters, Computational Complexity, FLOPs and Language Modeling</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-objectives">Learning Objectives</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-concepts">Key Concepts</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#parameters">Parameters</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#computational-complexity">Computational Complexity</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#flops">FLOPs</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#language-modeling">Language Modeling</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mathematical-foundation">Mathematical Foundation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#parameters-in-dense-layer">Parameters in Dense Layer</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#embedding-layer-parameters">Embedding Layer Parameters</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#self-attention-complexity">Self-Attention Complexity</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#flops-for-matrix-multiplication">FLOPs for Matrix Multiplication</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Example</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#architecture-diagram">Architecture Diagram</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#parameter-flow-in-transformer">Parameter Flow in Transformer</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#computational-flow">Computational Flow</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#detailed-explanation">Detailed Explanation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-parameter-count-matters">Why Parameter Count Matters</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-flops-matter">Why FLOPs Matter</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#transformer-complexity-problem">Transformer Complexity Problem</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-long-context-is-hard">Why Long Context is Hard</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction-to-language-modeling">Introduction to Language Modeling</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-a-language-model">What is a Language Model?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#chain-rule">Chain Rule</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Example</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#traditional-language-models">Traditional Language Models</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#neural-language-models">Neural Language Models</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#worked-example">Worked Example</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#parameter-counting">Parameter Counting</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#attention-complexity-example">Attention Complexity Example</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#python-demonstration">Python Demonstration</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Parameter Counting</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#flops-estimation">FLOPs Estimation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#language-model-example">Language Model Example</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#industry-perspective">Industry Perspective</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-industry-tracks-parameters">Why Industry Tracks Parameters</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-smaller-models-matter">Why Smaller Models Matter</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interview-questions">Interview Questions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#conceptual">Conceptual</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mathematical">Mathematical</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#llm-specific">LLM Specific</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-takeaways">Key Takeaways</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#papers">Papers</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation">Documentation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">Further Reading</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="week-02-parameters-computational-complexity-flops-and-language-modeling">
+<h1>Week 02: Parameters, Computational Complexity, FLOPs and Language Modeling<a class="headerlink" href="#week-02-parameters-computational-complexity-flops-and-language-modeling" title="Permalink to this heading">#</a></h1>
+<hr class="docutils" />
+<section id="learning-objectives">
+<h2>Learning Objectives<a class="headerlink" href="#learning-objectives" title="Permalink to this heading">#</a></h2>
+<p>By the end of this chapter, you should be able to:</p>
+<ul class="simple">
+<li><p>Understand what model parameters are.</p></li>
+<li><p>Calculate the number of parameters in neural networks.</p></li>
+<li><p>Estimate Transformer parameter counts.</p></li>
+<li><p>Understand computational complexity.</p></li>
+<li><p>Calculate FLOPs for matrix operations.</p></li>
+<li><p>Compare Transformer complexity with RNNs.</p></li>
+<li><p>Understand memory and compute bottlenecks.</p></li>
+<li><p>Understand the concept of language modeling.</p></li>
+<li><p>Differentiate between traditional and neural language models.</p></li>
+<li><p>Understand next-token prediction.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="key-concepts">
+<h2>Key Concepts<a class="headerlink" href="#key-concepts" title="Permalink to this heading">#</a></h2>
+<section id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Permalink to this heading">#</a></h3>
+<p>Parameters are learnable values inside a neural network.</p>
+<p>Examples:</p>
+<ul class="simple">
+<li><p>Weights</p></li>
+<li><p>Biases</p></li>
+<li><p>Embedding matrices</p></li>
+</ul>
+<p>A trained model stores knowledge inside its parameters.</p>
+<p>Examples:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Model</p></th>
+<th class="head"><p>Approximate Parameters</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>BERT Base</p></td>
+<td><p>110 Million</p></td>
+</tr>
+<tr class="row-odd"><td><p>BERT Large</p></td>
+<td><p>340 Million</p></td>
+</tr>
+<tr class="row-even"><td><p>GPT-2 Small</p></td>
+<td><p>124 Million</p></td>
+</tr>
+<tr class="row-odd"><td><p>GPT-3</p></td>
+<td><p>175 Billion</p></td>
+</tr>
+<tr class="row-even"><td><p>Llama 3 8B</p></td>
+<td><p>8 Billion</p></td>
+</tr>
+<tr class="row-odd"><td><p>Llama 3 70B</p></td>
+<td><p>70 Billion</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="computational-complexity">
+<h3>Computational Complexity<a class="headerlink" href="#computational-complexity" title="Permalink to this heading">#</a></h3>
+<p>Complexity measures how computation grows as input size increases.</p>
+<p>Usually represented as:</p>
+<p>O(n)</p>
+<p>Examples:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Operation</p></th>
+<th class="head"><p>Complexity</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Linear Search</p></td>
+<td><p>O(n)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Binary Search</p></td>
+<td><p>O(log n)</p></td>
+</tr>
+<tr class="row-even"><td><p>Matrix Multiplication</p></td>
+<td><p>O(n³)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Self Attention</p></td>
+<td><p>O(n²)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="flops">
+<h3>FLOPs<a class="headerlink" href="#flops" title="Permalink to this heading">#</a></h3>
+<p>FLOPs stands for:</p>
+<p>Floating Point Operations</p>
+<p>Examples:</p>
+<ul class="simple">
+<li><p>Addition</p></li>
+<li><p>Multiplication</p></li>
+<li><p>Division</p></li>
+</ul>
+<p>Used to estimate:</p>
+<ul class="simple">
+<li><p>Training cost</p></li>
+<li><p>Inference cost</p></li>
+<li><p>Hardware requirements</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="language-modeling">
+<h3>Language Modeling<a class="headerlink" href="#language-modeling" title="Permalink to this heading">#</a></h3>
+<p>Language modeling is the task of predicting language statistically.</p>
+<p>Example:</p>
+<p>Input:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>The capital of France is
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Paris
+</pre></div>
+</div>
+<p>The model predicts the most probable next token.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="mathematical-foundation">
+<h2>Mathematical Foundation<a class="headerlink" href="#mathematical-foundation" title="Permalink to this heading">#</a></h2>
+<section id="parameters-in-dense-layer">
+<h3>Parameters in Dense Layer<a class="headerlink" href="#parameters-in-dense-layer" title="Permalink to this heading">#</a></h3>
+<p>For a dense layer:</p>
+<div class="math notranslate nohighlight">
+\[
+Parameters = (Input \times Output) + Output
+\]</div>
+<p>where:</p>
+<ul class="simple">
+<li><p>Input = number of input neurons</p></li>
+<li><p>Output = number of output neurons</p></li>
+<li><p>Output term corresponds to biases</p></li>
+</ul>
+<hr class="docutils" />
+<section id="example">
+<h4>Example<a class="headerlink" href="#example" title="Permalink to this heading">#</a></h4>
+<p>Layer:</p>
+<p><span class="math notranslate nohighlight">\(
+512 \rightarrow 1024
+\)</span></p>
+<p>Parameters:</p>
+<p><span class="math notranslate nohighlight">\(
+512 \times 1024 = 524288
+\)</span></p>
+<p>Bias:</p>
+<p><span class="math notranslate nohighlight">\(
+1024
+\)</span></p>
+<p>Total:</p>
+<p><span class="math notranslate nohighlight">\(
+525312
+\)</span></p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="embedding-layer-parameters">
+<h3>Embedding Layer Parameters<a class="headerlink" href="#embedding-layer-parameters" title="Permalink to this heading">#</a></h3>
+<p><span class="math notranslate nohighlight">\(\boxed{\text{Parameters} = V \times d}\)</span> Where,</p>
+<ul class="simple">
+<li><p>Vocabulary: <span class="math notranslate nohighlight">\(V\)</span></p></li>
+<li><p>Embedding dimension: <span class="math notranslate nohighlight">\(d\)</span></p></li>
+<li><p>Example:</p>
+<ul>
+<li><p>Vocabulary: <span class="math notranslate nohighlight">\(50,000\)</span></p></li>
+<li><p>Embedding Dimension: <span class="math notranslate nohighlight">\(768\)</span></p></li>
+<li><p>Parameters: <span class="math notranslate nohighlight">\(50,000 \times 768 = 38,400,000\)</span></p></li>
+<li><p>Answer: <span class="math notranslate nohighlight">\(\boxed{38.4\ million\ parameters}\)</span>.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="self-attention-complexity">
+<h3>Self-Attention Complexity<a class="headerlink" href="#self-attention-complexity" title="Permalink to this heading">#</a></h3>
+<p><strong>Attention equation:</strong></p>
+<p><span class="math notranslate nohighlight">\(Attention(Q,K,V) = softmax \left(\frac{QK^T}{\sqrt{d_k}}\right)V\)</span></p>
+<ul class="simple">
+<li><p>Computing: <span class="math notranslate nohighlight">\(QK^T\)</span></p></li>
+<li><p>requires: <span class="math notranslate nohighlight">\(O(n^2)\)</span></p></li>
+</ul>
+<p>where:</p>
+<ul class="simple">
+<li><p>n = sequence length</p></li>
+<li><p>This is the major computational bottleneck.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="flops-for-matrix-multiplication">
+<h3>FLOPs for Matrix Multiplication<a class="headerlink" href="#flops-for-matrix-multiplication" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Matrix-A: <span class="math notranslate nohighlight">\(A(m \times k)\)</span></p></li>
+<li><p>Matrix-B: <span class="math notranslate nohighlight">\(B(k \times n)\)</span></p></li>
+<li><p>FLOPs: <span class="math notranslate nohighlight">\(2mkn\)</span></p></li>
+</ul>
+<hr class="docutils" />
+<section id="id1">
+<h4>Example<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Multiply: <span class="math notranslate nohighlight">\(1024 \times 1024\)</span>
+by <span class="math notranslate nohighlight">\(1024 \times 1024\)</span></p></li>
+<li><p>FLOPs: <span class="math notranslate nohighlight">\(2 \times 1024^3\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(2.15 \times 10^9\)</span></p></li>
+<li><p>Approximately: <span class="math notranslate nohighlight">\(\boxed{2.15\ GFLOPs}\)</span></p></li>
+</ul>
+</section>
+</section>
+</section>
+<hr class="docutils" />
+<section id="architecture-diagram">
+<h2>Architecture Diagram<a class="headerlink" href="#architecture-diagram" title="Permalink to this heading">#</a></h2>
+<section id="parameter-flow-in-transformer">
+<h3>Parameter Flow in Transformer<a class="headerlink" href="#parameter-flow-in-transformer" title="Permalink to this heading">#</a></h3>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>      Input Tokens
+            │
+            ▼
+      Embedding Layer
+            │
+            ▼
+      Transformer Block
+            │
+            ├── Attention Parameters
+            │
+            ├── Feed Forward Parameters
+            │
+            └── LayerNorm Parameters
+            │
+            ▼
+      Output Layer
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="computational-flow">
+<h3>Computational Flow<a class="headerlink" href="#computational-flow" title="Permalink to this heading">#</a></h3>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>        Tokens
+            │
+            ▼
+        Embeddings
+            │
+            ▼
+        Q K V Projection
+            │
+            ▼
+        Attention Matrix
+            │
+            ▼
+        Softmax
+            │
+            ▼
+        Weighted Sum
+            │
+            ▼
+        Feed Forward
+            │
+            ▼
+        Output
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="detailed-explanation">
+<h2>Detailed Explanation<a class="headerlink" href="#detailed-explanation" title="Permalink to this heading">#</a></h2>
+<section id="why-parameter-count-matters">
+<h3>Why Parameter Count Matters<a class="headerlink" href="#why-parameter-count-matters" title="Permalink to this heading">#</a></h3>
+<p>More parameters generally mean:</p>
+<p>Advantages:</p>
+<ul class="simple">
+<li><p>Better representation power</p></li>
+<li><p>Better learning capability</p></li>
+<li><p>Better generalization</p></li>
+</ul>
+<p>Disadvantages:</p>
+<ul class="simple">
+<li><p>More memory</p></li>
+<li><p>More computation</p></li>
+<li><p>Longer training time</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="why-flops-matter">
+<h3>Why FLOPs Matter<a class="headerlink" href="#why-flops-matter" title="Permalink to this heading">#</a></h3>
+<p>Training cost depends heavily on FLOPs.</p>
+<p>Examples:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Model</p></th>
+<th class="head"><p>Estimated Training FLOPs</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>GPT-2</p></td>
+<td><p>~1e20</p></td>
+</tr>
+<tr class="row-odd"><td><p>GPT-3</p></td>
+<td><p>~3e23</p></td>
+</tr>
+<tr class="row-even"><td><p>Modern Frontier Models</p></td>
+<td><p>&gt;1e25</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>As models scale:</p>
+<ul class="simple">
+<li><p>Energy consumption increases</p></li>
+<li><p>GPU requirements increase</p></li>
+<li><p>Training cost increases</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="transformer-complexity-problem">
+<h3>Transformer Complexity Problem<a class="headerlink" href="#transformer-complexity-problem" title="Permalink to this heading">#</a></h3>
+<p>RNN Complexity: <span class="math notranslate nohighlight">\(O(n)\)</span></p>
+<p>Attention Complexity: <span class="math notranslate nohighlight">\(O(n^2)\)</span></p>
+<p>Example:</p>
+<ul class="simple">
+<li><p>Sequence length: <code class="docutils literal notranslate"> <span class="pre">128</span> <span class="pre">tokens</span></code></p></li>
+<li><p>Attention matrix: <code class="docutils literal notranslate"><span class="pre">128</span> <span class="pre">×</span> <span class="pre">128</span> <span class="pre">=</span> <span class="pre">16,384</span> <span class="pre">entries</span></code></p></li>
+<li><p>Sequence length: <code class="docutils literal notranslate"><span class="pre">4096</span> <span class="pre">tokens</span></code></p></li>
+<li><p>Attention matrix: <code class="docutils literal notranslate"> <span class="pre">4096</span> <span class="pre">×</span> <span class="pre">4096</span> <span class="pre">=</span> <span class="pre">16,777,216</span> <span class="pre">entries</span></code></p></li>
+</ul>
+<p>The cost grows rapidly.</p>
+</section>
+<hr class="docutils" />
+<section id="why-long-context-is-hard">
+<h3>Why Long Context is Hard<a class="headerlink" href="#why-long-context-is-hard" title="Permalink to this heading">#</a></h3>
+<p>Modern LLMs support:</p>
+<ul class="simple">
+<li><p>32K context</p></li>
+<li><p>128K context</p></li>
+<li><p>1M context</p></li>
+</ul>
+<p>Attention memory grows quadratically.</p>
+<p>This motivates:</p>
+<ul class="simple">
+<li><p>Flash Attention</p></li>
+<li><p>Sparse Attention</p></li>
+<li><p>Sliding Window Attention</p></li>
+<li><p>Linear Attention</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="introduction-to-language-modeling">
+<h2>Introduction to Language Modeling<a class="headerlink" href="#introduction-to-language-modeling" title="Permalink to this heading">#</a></h2>
+<section id="what-is-a-language-model">
+<h3>What is a Language Model?<a class="headerlink" href="#what-is-a-language-model" title="Permalink to this heading">#</a></h3>
+<p>A language model estimates:</p>
+<div class="math notranslate nohighlight">
+\[
+P(w_1,w_2,...,w_n)
+\]</div>
+<p>Probability of a sequence of words.</p>
+</section>
+<section id="chain-rule">
+<h3>Chain Rule<a class="headerlink" href="#chain-rule" title="Permalink to this heading">#</a></h3>
+<div class="math notranslate nohighlight">
+\[
+P(w_1,w_2,w_3) = P(w_1) P(w_2|w_1) P(w_3|w_1,w_2)
+\]</div>
+<p>Language modeling predicts the next token using previous tokens.</p>
+</section>
+<hr class="docutils" />
+<section id="id2">
+<h3>Example<a class="headerlink" href="#id2" title="Permalink to this heading">#</a></h3>
+<p>Sentence:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>The cat sat on the
+</pre></div>
+</div>
+<p>Possible predictions:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Token</p></th>
+<th class="head"><p>Probability</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>mat</p></td>
+<td><p>0.62</p></td>
+</tr>
+<tr class="row-odd"><td><p>floor</p></td>
+<td><p>0.20</p></td>
+</tr>
+<tr class="row-even"><td><p>chair</p></td>
+<td><p>0.08</p></td>
+</tr>
+<tr class="row-odd"><td><p>roof</p></td>
+<td><p>0.05</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Highest probability token is selected.</p>
+</section>
+<hr class="docutils" />
+<section id="traditional-language-models">
+<h3>Traditional Language Models<a class="headerlink" href="#traditional-language-models" title="Permalink to this heading">#</a></h3>
+<p>Before Transformers:</p>
+<ul class="simple">
+<li><p>N-gram Models</p></li>
+<li><p>Statistical Language Models</p></li>
+</ul>
+<p>Example:</p>
+<p>Bigram:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>I love
+</pre></div>
+</div>
+<p>Predict:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>AI
+</pre></div>
+</div>
+<p>based on frequency counts.</p>
+<p>Problems:</p>
+<ul class="simple">
+<li><p>Data sparsity</p></li>
+<li><p>Poor generalization</p></li>
+<li><p>No semantic understanding</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="neural-language-models">
+<h3>Neural Language Models<a class="headerlink" href="#neural-language-models" title="Permalink to this heading">#</a></h3>
+<p>Neural networks learn:</p>
+<ul class="simple">
+<li><p>Syntax</p></li>
+<li><p>Semantics</p></li>
+<li><p>Context</p></li>
+</ul>
+<p>Advantages:</p>
+<ul class="simple">
+<li><p>Better generalization</p></li>
+<li><p>Context awareness</p></li>
+<li><p>Transfer learning</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="worked-example">
+<h2>Worked Example<a class="headerlink" href="#worked-example" title="Permalink to this heading">#</a></h2>
+<section id="parameter-counting">
+<h3>Parameter Counting<a class="headerlink" href="#parameter-counting" title="Permalink to this heading">#</a></h3>
+<ul>
+<li><p>Network:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Input: 784
+Hidden: 128
+Output: 10
+</pre></div>
+</div>
+</li>
+<li><p>Hidden Layer: <span class="math notranslate nohighlight">\(784 \times 128 = 100352\)</span></p></li>
+<li><p>Bias: <span class="math notranslate nohighlight">\(128\)</span></p></li>
+<li><p>Total: <span class="math notranslate nohighlight">\(100480\)</span></p></li>
+<li><p>Output Layer: <span class="math notranslate nohighlight">\(128 \times 10 = 1280\)</span></p></li>
+<li><p>Bias: <span class="math notranslate nohighlight">\(10\)</span></p></li>
+<li><p>Total: <span class="math notranslate nohighlight">\(1290\)</span></p></li>
+</ul>
+<hr class="docutils" />
+<ul class="simple">
+<li><p>Grand Total: <span class="math notranslate nohighlight">\(101770\)</span> parameters.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="attention-complexity-example">
+<h3>Attention Complexity Example<a class="headerlink" href="#attention-complexity-example" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Sequence: <code class="docutils literal notranslate"><span class="pre">128</span> <span class="pre">tokens</span></code></p></li>
+<li><p>Attention matrix: <span class="math notranslate nohighlight">\(128^2 = 16384\)</span></p></li>
+<li><p>Sequence: <code class="docutils literal notranslate"><span class="pre">512</span> <span class="pre">tokens</span></code></p></li>
+<li><p>Attention matrix: <span class="math notranslate nohighlight">\(512^2 = 262144\)</span></p></li>
+</ul>
+<p>Increase: <span class="math notranslate nohighlight">\(16 \times\)</span></p>
+<p>more computation.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="python-demonstration">
+<h2>Python Demonstration<a class="headerlink" href="#python-demonstration" title="Permalink to this heading">#</a></h2>
+<section id="id3">
+<h3>Parameter Counting<a class="headerlink" href="#id3" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">count_parameters</span><span class="p">(</span><span class="n">input_dim</span><span class="p">,</span> <span class="n">output_dim</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">input_dim</span> <span class="o">*</span> <span class="n">output_dim</span> <span class="o">+</span> <span class="n">output_dim</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">count_parameters</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span><span class="mi">1024</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>525312
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="flops-estimation">
+<h3>FLOPs Estimation<a class="headerlink" href="#flops-estimation" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">matmul_flops</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="n">k</span><span class="p">,</span><span class="n">n</span><span class="p">):</span>
+    <span class="k">return</span> <span class="mi">2</span><span class="o">*</span><span class="n">m</span><span class="o">*</span><span class="n">k</span><span class="o">*</span><span class="n">n</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">matmul_flops</span><span class="p">(</span><span class="mi">1024</span><span class="p">,</span><span class="mi">1024</span><span class="p">,</span><span class="mi">1024</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2147483648
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="language-model-example">
+<h3>Language Model Example<a class="headerlink" href="#language-model-example" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">transformers</span><span class="w"> </span><span class="kn">import</span> <span class="n">pipeline</span>
+
+<span class="n">generator</span> <span class="o">=</span> <span class="n">pipeline</span><span class="p">(</span>
+    <span class="s2">&quot;text-generation&quot;</span><span class="p">,</span>
+    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt2&quot;</span>
+<span class="p">)</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">generator</span><span class="p">(</span>
+    <span class="s2">&quot;The future of artificial intelligence is&quot;</span><span class="p">,</span>
+    <span class="n">max_length</span><span class="o">=</span><span class="mi">30</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;generated_text&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "124f7c113a984ba9858ca3e519bbd78d", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "2bc9fd0767f34b82b5e448d89653b484", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "7a80d64e66944dbd8dad4ec144b89189", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "b0275e942dd74bd6beebb25e342f86c4", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "6cd58fc70fb84fbabfb35abccbcd9ab0", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "41563170cb0f45a79bec3e1981ecec96", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "89554b80c58a4f959c5d5ba27d3c38da", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "74ca9f4d91454b8298d5fa0c4e1f9264", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[transformers] Passing `generation_config` together with generation-related arguments=({&#39;max_length&#39;}) is deprecated and will be removed in future versions. Please pass either a `generation_config` object OR all generation parameters explicitly, but not both.
+[transformers] Setting `pad_token_id` to `eos_token_id`:50256 for open-end generation.
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=30) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Ignoring clean_up_tokenization_spaces=True for BPE tokenizer GPT2Tokenizer. The clean_up_tokenization post-processing step is designed for WordPiece tokenizers and is destructive for BPE (it strips spaces before punctuation). Set clean_up_tokenization_spaces=False to suppress this warning, or set clean_up_tokenization_spaces_for_bpe_even_though_it_will_corrupt_output=True to force cleanup anyway.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The future of artificial intelligence is in the hands of experts, and there will be hundreds of scientists working on it for decades to come. These experts are so motivated to make it work that they&#39;ve been able to get their hands on hundreds of pieces of computer code, which is what they&#39;ve been doing for a long time.
+
+
+And the technology is great in the hands of our great AI. It works in real-time, which is very cool. We&#39;ve got real-time AI for a very good reason. It&#39;s so that we can take a real-time approach to our lives. We&#39;re already using it in real-time to train, to get things done, and to make more money.
+
+
+The idea is that even if we can&#39;t do that, the next thing we do is to do it on a computer. And that&#39;s what we&#39;re doing today.
+
+
+The goal is to bring artificial intelligence up to speed and to have a system that can learn to learn at a higher level. And it&#39;s very exciting to have the ability to do this.
+
+
+The point is, we have a really good way of making things happen in the real world. This is something that we&#39;ve built in the past. We&#39;ve had a very good system that&#39;s able
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="industry-perspective">
+<h2>Industry Perspective<a class="headerlink" href="#industry-perspective" title="Permalink to this heading">#</a></h2>
+<section id="why-industry-tracks-parameters">
+<h3>Why Industry Tracks Parameters<a class="headerlink" href="#why-industry-tracks-parameters" title="Permalink to this heading">#</a></h3>
+<p>Companies compare models by:</p>
+<ul class="simple">
+<li><p>Parameter count</p></li>
+<li><p>Training FLOPs</p></li>
+<li><p>Benchmark performance</p></li>
+</ul>
+<p>Examples:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Model</p></th>
+<th class="head"><p>Parameters</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>GPT-3</p></td>
+<td><p>175B</p></td>
+</tr>
+<tr class="row-odd"><td><p>PaLM</p></td>
+<td><p>540B</p></td>
+</tr>
+<tr class="row-even"><td><p>Llama 3</p></td>
+<td><p>8B / 70B</p></td>
+</tr>
+<tr class="row-odd"><td><p>DeepSeek</p></td>
+<td><p>Hundreds of billions (MoE)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="why-smaller-models-matter">
+<h3>Why Smaller Models Matter<a class="headerlink" href="#why-smaller-models-matter" title="Permalink to this heading">#</a></h3>
+<p>Smaller models provide:</p>
+<ul class="simple">
+<li><p>Lower inference cost</p></li>
+<li><p>Faster deployment</p></li>
+<li><p>Edge-device compatibility</p></li>
+</ul>
+<p>Example:</p>
+<p>7B parameter models can often run on consumer GPUs.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="interview-questions">
+<h2>Interview Questions<a class="headerlink" href="#interview-questions" title="Permalink to this heading">#</a></h2>
+<section id="conceptual">
+<h3>Conceptual<a class="headerlink" href="#conceptual" title="Permalink to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p>What are model parameters?</p></li>
+<li><p>Why do larger models generally perform better?</p></li>
+<li><p>What are FLOPs?</p></li>
+<li><p>Why is self-attention expensive?</p></li>
+<li><p>What is computational complexity?</p></li>
+</ol>
+</section>
+<hr class="docutils" />
+<section id="mathematical">
+<h3>Mathematical<a class="headerlink" href="#mathematical" title="Permalink to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p>Calculate parameters in a dense layer.</p></li>
+<li><p>Derive embedding layer parameter count.</p></li>
+<li><p>Calculate FLOPs of matrix multiplication.</p></li>
+<li><p>Why does attention scale quadratically?</p></li>
+</ol>
+</section>
+<hr class="docutils" />
+<section id="llm-specific">
+<h3>LLM Specific<a class="headerlink" href="#llm-specific" title="Permalink to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p>What is language modeling?</p></li>
+<li><p>How does GPT perform next-token prediction?</p></li>
+<li><p>What is the difference between an N-gram model and GPT?</p></li>
+<li><p>Why is context length expensive?</p></li>
+</ol>
+</section>
+</section>
+<hr class="docutils" />
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Permalink to this heading">#</a></h2>
+<section id="key-takeaways">
+<h3>Key Takeaways<a class="headerlink" href="#key-takeaways" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Parameters store learned knowledge.</p></li>
+<li><p>Embedding layers often contribute millions of parameters.</p></li>
+<li><p>FLOPs estimate computational cost.</p></li>
+<li><p>Self-attention scales as O(n²).</p></li>
+<li><p>Long context windows are computationally expensive.</p></li>
+<li><p>Language models estimate token probabilities.</p></li>
+<li><p>GPT performs next-token prediction.</p></li>
+<li><p>Understanding parameter counts and FLOPs is essential for scaling modern LLMs.</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this heading">#</a></h2>
+<section id="papers">
+<h3>Papers<a class="headerlink" href="#papers" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Attention Is All You Need (2017)</p></li>
+<li><p>GPT-3: Language Models are Few-Shot Learners</p></li>
+<li><p>PaLM</p></li>
+<li><p>Chinchilla</p></li>
+</ul>
+</section>
+<section id="documentation">
+<h3>Documentation<a class="headerlink" href="#documentation" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>PyTorch Documentation</p></li>
+<li><p>Hugging Face Transformers</p></li>
+<li><p>Jupyter Book Documentation</p></li>
+</ul>
+</section>
+<section id="further-reading">
+<h3>Further Reading<a class="headerlink" href="#further-reading" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Dive Into Deep Learning</p></li>
+<li><p>Stanford CS224N</p></li>
+<li><p>Illustrated Transformer</p></li>
+</ul>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./week02"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../week01/transformers.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Week 01: Transformers</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../week03/causal_language_modeling_gpt.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Week3: Casual Language Modeling GPT</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-objectives">Learning Objectives</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-concepts">Key Concepts</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#parameters">Parameters</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#computational-complexity">Computational Complexity</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#flops">FLOPs</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#language-modeling">Language Modeling</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mathematical-foundation">Mathematical Foundation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#parameters-in-dense-layer">Parameters in Dense Layer</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#embedding-layer-parameters">Embedding Layer Parameters</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#self-attention-complexity">Self-Attention Complexity</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#flops-for-matrix-multiplication">FLOPs for Matrix Multiplication</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Example</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#architecture-diagram">Architecture Diagram</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#parameter-flow-in-transformer">Parameter Flow in Transformer</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#computational-flow">Computational Flow</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#detailed-explanation">Detailed Explanation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-parameter-count-matters">Why Parameter Count Matters</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-flops-matter">Why FLOPs Matter</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#transformer-complexity-problem">Transformer Complexity Problem</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-long-context-is-hard">Why Long Context is Hard</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction-to-language-modeling">Introduction to Language Modeling</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-a-language-model">What is a Language Model?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#chain-rule">Chain Rule</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Example</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#traditional-language-models">Traditional Language Models</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#neural-language-models">Neural Language Models</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#worked-example">Worked Example</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#parameter-counting">Parameter Counting</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#attention-complexity-example">Attention Complexity Example</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#python-demonstration">Python Demonstration</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Parameter Counting</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#flops-estimation">FLOPs Estimation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#language-model-example">Language Model Example</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#industry-perspective">Industry Perspective</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-industry-tracks-parameters">Why Industry Tracks Parameters</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-smaller-models-matter">Why Smaller Models Matter</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interview-questions">Interview Questions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#conceptual">Conceptual</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mathematical">Mathematical</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#llm-specific">LLM Specific</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-takeaways">Key Takeaways</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#papers">Papers</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation">Documentation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">Further Reading</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Susheel Kumar Shukla
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
